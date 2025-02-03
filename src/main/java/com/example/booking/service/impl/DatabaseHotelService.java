@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -46,11 +45,12 @@ public class DatabaseHotelService implements HotelService {
 
     @Override
     public Hotel update(Hotel hotel) {
-        Hotel existedHotel = findById(hotel.getId());
 
-        BeanUtils.copyNonNullProperties(hotel, existedHotel);
+        Hotel hotelForUpdate = findById(hotel.getId());
 
-        return hotelRepository.save(existedHotel);
+        BeanUtils.copyNonNullProperties(hotel, hotelForUpdate);
+
+        return hotelRepository.save(hotelForUpdate);
     }
 
     @Override
