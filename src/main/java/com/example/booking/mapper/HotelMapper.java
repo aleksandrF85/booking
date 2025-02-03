@@ -3,16 +3,14 @@ import com.example.booking.model.Hotel;
 import com.example.booking.web.model.HotelListResponse;
 import com.example.booking.web.model.HotelResponse;
 import com.example.booking.web.model.UpsertHotelRequest;
-import org.mapstruct.DecoratedWith;
-import org.mapstruct.Mapper;
-import org.mapstruct.ReportingPolicy;
+import org.mapstruct.*;
 
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @DecoratedWith(HotelMapperDelegate.class)
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING)
 public interface HotelMapper {
 
     Hotel requestToHotel(UpsertHotelRequest request);

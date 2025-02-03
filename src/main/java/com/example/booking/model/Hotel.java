@@ -3,6 +3,9 @@ package com.example.booking.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @Entity
 @AllArgsConstructor
@@ -35,6 +38,7 @@ public class Hotel {
     @Column(name = "numberOfRatings")
     private int numberOfRatings;
 
-
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "hotel")
+    private List<Room> rooms = new ArrayList<>();
 
 }

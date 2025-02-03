@@ -1,11 +1,8 @@
 package com.example.booking.mapper;
 
 import com.example.booking.model.Hotel;
-import com.example.booking.web.model.HotelListResponse;
 import com.example.booking.web.model.HotelResponse;
 import com.example.booking.web.model.UpsertHotelRequest;
-
-import java.util.List;
 
 public abstract class HotelMapperDelegate implements HotelMapper{
 
