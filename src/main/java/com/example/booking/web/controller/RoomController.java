@@ -37,7 +37,7 @@ public class RoomController {
 
     @PostMapping
     public ResponseEntity<RoomResponse> create(@RequestBody @Valid UpsertRoomRequest request,
-                                                @PathVariable String hotelName) {
+                                                @RequestParam String hotelName) {
 
         Room newRoom = roomMapper.requestToRoom(request);
 
