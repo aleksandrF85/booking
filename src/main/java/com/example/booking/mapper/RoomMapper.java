@@ -4,22 +4,20 @@ import com.example.booking.model.Room;
 import com.example.booking.web.model.RoomListResponse;
 import com.example.booking.web.model.RoomResponse;
 import com.example.booking.web.model.UpsertRoomRequest;
-import org.mapstruct.DecoratedWith;
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingConstants;
-import org.mapstruct.ReportingPolicy;
+import org.mapstruct.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @DecoratedWith(RoomMapperDelegate.class)
-@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING/*, uses = {HotelMapper.class}*/)
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface RoomMapper {
 
     Room requestToRoom(UpsertRoomRequest request);
 
     Room requestToRoom(Long id, UpsertRoomRequest request);
 
+//    @Mapping(expression = "java(room.getHotel().getName())", target = "hotelName")
     RoomResponse roomToResponse(Room room);
 
     default RoomListResponse roomListToRoomListResponse(List<Room> rooms) {
@@ -29,9 +27,5 @@ public interface RoomMapper {
 
         return response;
     }
-
-
-//    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-//    Room partialUpdate(UpsertRoomRequest upsertRoomRequest, @MappingTarget Room room);
 
 }

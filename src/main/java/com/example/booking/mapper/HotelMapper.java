@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @DecoratedWith(HotelMapperDelegate.class)
-@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING)
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface HotelMapper {
 
     Hotel requestToHotel(UpsertHotelRequest request);

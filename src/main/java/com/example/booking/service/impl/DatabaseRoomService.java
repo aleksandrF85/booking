@@ -1,9 +1,8 @@
 package com.example.booking.service.impl;
 
-import com.example.booking.model.Hotel;
 import com.example.booking.model.Room;
-import com.example.booking.reposirory.HotelRepository;
-import com.example.booking.reposirory.RoomRepository;
+import com.example.booking.repository.HotelRepository;
+import com.example.booking.repository.RoomRepository;
 import com.example.booking.service.RoomService;
 import com.example.booking.utils.BeanUtils;
 import jakarta.persistence.EntityNotFoundException;
