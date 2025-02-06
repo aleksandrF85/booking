@@ -56,7 +56,7 @@ public class DatabaseHotelService implements HotelService {
     @Override
     public void deleteById(Long id) {
 
-//        findById(id);
+        findById(id);
         hotelRepository.deleteById(id);
     }
 }

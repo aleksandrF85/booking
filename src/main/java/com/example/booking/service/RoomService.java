@@ -3,6 +3,7 @@ package com.example.booking.service;
 import com.example.booking.model.Hotel;
 import com.example.booking.model.Room;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface RoomService {
@@ -11,9 +12,19 @@ public interface RoomService {
 
     Room findById(Long id);
 
+    Room findByHotelAndNumber(Hotel hotel, int number);
+
     Room save(Room room, String hotelName);
 
     Room update(Room room);
 
     void deleteById(Long id);
+
+    void checkCapacity(Room room, int guestAmount);
+
+    void checkDates(LocalDate checkIn, LocalDate checkOut);
+
+    void setUnavailableDates(Room room, List<LocalDate> bookingDates);
+
+    void removeBookingDates(Room room, List<LocalDate> bookingDates);
 }

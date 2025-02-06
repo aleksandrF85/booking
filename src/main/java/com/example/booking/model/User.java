@@ -42,15 +42,9 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Set<RoleType> roles = new HashSet<>();
 
-//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "newsAuthor")
-//    @Builder.Default
-//    @ToString.Exclude
-//    private List<News> newsList = new ArrayList<>();
-//
-//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "commentAuthor")
-//    @Builder.Default
-//    @ToString.Exclude
-//    private List<Comment> commentList = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @ToString.Exclude
+    private List<Booking> bookingList = new ArrayList<>();
 
     public void addRole(RoleType role) {
         getRoles().add(role);

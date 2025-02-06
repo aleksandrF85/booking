@@ -1,7 +1,9 @@
 package com.example.booking.service.impl;
 
+import com.example.booking.model.Booking;
 import com.example.booking.model.User;
 import com.example.booking.repository.UserRepository;
+import com.example.booking.service.BookingService;
 import com.example.booking.service.UserService;
 import com.example.booking.utils.BeanUtils;
 import jakarta.persistence.EntityNotFoundException;
@@ -17,6 +19,8 @@ import java.util.List;
 public class DatabaseUserService implements UserService {
 
     private final UserRepository userRepository;
+
+    private final BookingService databaseBookingService;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -70,7 +74,10 @@ public class DatabaseUserService implements UserService {
     @Override
     public void deleteById(Long id) {
 
-//        findById(id);
+        for (Booking booking : findById(id).getBookingList()) {
+            databaseBookingService.deleteById(booking.getId());
+        }
+
         userRepository.deleteById(id);
     }
 }

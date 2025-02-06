@@ -3,6 +3,7 @@ package com.example.booking.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -34,9 +35,13 @@ public class Room {
     private int maxCapacity;
 
     @Column(name = "unavailable_dates", nullable = false)
-    private List<Date> unavailableDates = new ArrayList<>();
+    private List<LocalDate> unavailableDates = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "hotel_id", nullable = false)
     private Hotel hotel;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "room")
+    @ToString.Exclude
+    private List<Booking> bookingList = new ArrayList<>();
 }
