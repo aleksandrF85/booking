@@ -17,7 +17,6 @@ public interface RoomMapper {
 
     Room requestToRoom(Long id, UpsertRoomRequest request);
 
-//    @Mapping(expression = "java(room.getHotel().getName())", target = "hotelName")
     RoomResponse roomToResponse(Room room);
 
     default RoomListResponse roomListToRoomListResponse(List<Room> rooms) {

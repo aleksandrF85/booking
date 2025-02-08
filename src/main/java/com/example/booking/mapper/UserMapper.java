@@ -4,14 +4,12 @@ import com.example.booking.model.User;
 import com.example.booking.web.model.UpsertUserRequest;
 import com.example.booking.web.model.UserListResponse;
 import com.example.booking.web.model.UserResponse;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingConstants;
-import org.mapstruct.ReportingPolicy;
+import org.mapstruct.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@DecoratedWith(UserMapperDelegate.class)
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface UserMapper {
 

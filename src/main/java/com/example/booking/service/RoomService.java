@@ -2,6 +2,8 @@ package com.example.booking.service;
 
 import com.example.booking.model.Hotel;
 import com.example.booking.model.Room;
+import com.example.booking.web.model.filter.HotelFilter;
+import com.example.booking.web.model.filter.RoomFilter;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -11,6 +13,8 @@ public interface RoomService {
     List<Room> findAll();
 
     Room findById(Long id);
+
+    List<Room> filterBy(RoomFilter filter, int pageSize, int pageNumber);
 
     Room findByHotelAndNumber(Hotel hotel, int number);
 

@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,7 @@ public class BookingController {
 
     private final BookingMapper bookingMapper;
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping
     public ResponseEntity<BookingListResponse> findAll() {
         return ResponseEntity.ok(
@@ -30,13 +32,7 @@ public class BookingController {
         );
     }
 
-//    @GetMapping("/{id}")
-//    public ResponseEntity<BookingListResponse> findByAllByUser (@AuthenticationPrincipal UserDetails userDetails) {
-//        return ResponseEntity.ok(bookingMapper.bookingListToBookingListResponse(
-//                databaseBookingService.findById()
-//        ));
-//    }
-
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     @PostMapping
     public ResponseEntity<BookingResponse> create(@RequestBody @Valid UpsertBookingRequest request,
                                                 @AuthenticationPrincipal UserDetails userDetails) {

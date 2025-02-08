@@ -8,8 +8,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Data
+//@Data
 @Entity
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "rooms")
@@ -41,7 +43,7 @@ public class Room {
     @JoinColumn(name = "hotel_id", nullable = false)
     private Hotel hotel;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "room")
+    @OneToMany(mappedBy = "room")
     @ToString.Exclude
     private List<Booking> bookingList = new ArrayList<>();
 }

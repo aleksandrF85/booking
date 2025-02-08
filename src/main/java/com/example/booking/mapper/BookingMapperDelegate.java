@@ -6,10 +6,12 @@ import com.example.booking.service.HotelService;
 import com.example.booking.service.RoomService;
 import com.example.booking.web.model.BookingResponse;
 import com.example.booking.web.model.UpsertBookingRequest;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.text.MessageFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,11 +29,11 @@ public abstract class BookingMapperDelegate implements BookingMapper{
 
         var hotel = databaseHotelService.findByName((request.getHotelName()));
         var room = databaseRoomService.findByHotelAndNumber(hotel, request.getRoomNumber());
-        var bookingDates = request.getCheckIn().datesUntil(request.getCheckOut()).collect(Collectors.toList());
 
         databaseRoomService.checkCapacity(room, request.getGuestAmount());
 
         databaseRoomService.checkDates(request.getCheckIn(), request.getCheckOut());
+        var bookingDates = request.getCheckIn().datesUntil(request.getCheckOut()).collect(Collectors.toList());
 
         databaseRoomService.setUnavailableDates(room, bookingDates);
 

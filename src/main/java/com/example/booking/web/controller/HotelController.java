@@ -6,11 +6,15 @@ import com.example.booking.service.HotelService;
 import com.example.booking.web.model.HotelListResponse;
 import com.example.booking.web.model.HotelResponse;
 import com.example.booking.web.model.UpsertHotelRequest;
+import com.example.booking.web.model.UpsertRatingRequest;
+import com.example.booking.web.model.filter.HotelFilter;
+import com.example.booking.web.model.filter.PageFilter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 @RestController
 @RequestMapping("/api/hotel")
@@ -21,6 +25,7 @@ public class HotelController {
 
     private final HotelMapper hotelMapper;
 
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     @GetMapping
     public ResponseEntity<HotelListResponse> findAll() {
         return ResponseEntity.ok(
@@ -30,6 +35,7 @@ public class HotelController {
         );
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<HotelResponse> findById (@PathVariable Long id) {
         return ResponseEntity.ok(hotelMapper.hotelToResponse(
@@ -37,13 +43,17 @@ public class HotelController {
         ));
     }
 
-    @GetMapping("/name/{name}")
-    public ResponseEntity<HotelResponse> findByName (@PathVariable String name) {
-        return ResponseEntity.ok(hotelMapper.hotelToResponse(
-                databaseHotelService.findByName(name)
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+    @GetMapping("/filter")
+    public ResponseEntity<HotelListResponse> filterBy (@RequestBody HotelFilter hotelFilter,
+                                                       @Valid PageFilter pageFilter) {
+        return ResponseEntity.ok(hotelMapper.hotelListToHotelListResponse(
+                databaseHotelService.filterBy(
+                        hotelFilter, pageFilter.getPageSize(), pageFilter.getPageNumber())
         ));
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
     public ResponseEntity<HotelResponse> create(@RequestBody @Valid UpsertHotelRequest request) {
 
@@ -53,6 +63,7 @@ public class HotelController {
                 .body(hotelMapper.hotelToResponse(databaseHotelService.save(newHotel)));
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<HotelResponse> update(@PathVariable Long id,
                                                 @RequestBody UpsertHotelRequest request) {
@@ -62,11 +73,21 @@ public class HotelController {
         return ResponseEntity.ok(hotelMapper.hotelToResponse(updatedHotel));
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
 
         databaseHotelService.deleteById(id);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+    @PutMapping("/rating/{id}")
+    public ResponseEntity<HotelResponse> rate (@PathVariable Long id, @RequestBody @Valid UpsertRatingRequest request) {
+
+        return ResponseEntity.ok(hotelMapper.hotelToResponse(
+                databaseHotelService.rate(id, request.getMark())
+        ));
     }
 }

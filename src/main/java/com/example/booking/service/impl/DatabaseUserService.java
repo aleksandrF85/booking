@@ -7,7 +7,9 @@ import com.example.booking.service.BookingService;
 import com.example.booking.service.UserService;
 import com.example.booking.utils.BeanUtils;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,14 +17,17 @@ import java.text.MessageFormat;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class DatabaseUserService implements UserService {
 
-    private final UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
-    private final BookingService databaseBookingService;
+    @Autowired
+    private BookingService databaseBookingService;
 
-    private final PasswordEncoder passwordEncoder;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public List<User> findAll() {
@@ -48,6 +53,36 @@ public class DatabaseUserService implements UserService {
     @Override
     public User save(User user) {
 
+        isUserAlreadyExist(user);
+
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return userRepository.save(user);
+    }
+
+    @Override
+    public User update(User user) {
+        User userForUpdate = findById(user.getId());
+
+        BeanUtils.copyNonNullProperties(user, userForUpdate);
+
+        isUserAlreadyExist(userForUpdate);
+
+        return userRepository.save(userForUpdate);
+    }
+
+    @Transactional
+    @Override
+    public void deleteById(Long id) {
+
+        for (Booking booking : findById(id).getBookingList()) {
+            databaseBookingService.deleteById(booking.getId());
+        }
+
+        userRepository.deleteById(id);
+    }
+
+    private void isUserAlreadyExist (User user){
+
         if (userRepository.findByUsername(user.getUsername()).isPresent()) {
             throw new IllegalArgumentException(MessageFormat.format(
                     "Пользователь с таким логином {0} уже зарегистрирован!", user.getUsername()
@@ -59,25 +94,5 @@ public class DatabaseUserService implements UserService {
             ));
         }
 
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
-    }
-
-    @Override
-    public User update(User user) {
-        User userForUpdate = findById(user.getId());
-
-        BeanUtils.copyNonNullProperties(user, userForUpdate);
-        return userRepository.save(userForUpdate);
-    }
-
-    @Override
-    public void deleteById(Long id) {
-
-        for (Booking booking : findById(id).getBookingList()) {
-            databaseBookingService.deleteById(booking.getId());
-        }
-
-        userRepository.deleteById(id);
     }
 }

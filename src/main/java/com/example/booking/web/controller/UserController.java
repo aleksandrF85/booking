@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -24,7 +26,7 @@ public class UserController {
     private final UserMapper userMapper;
 
     @GetMapping
-//    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<UserListResponse> findAll() {
         return ResponseEntity.ok(
                 userMapper.userListToUserListResponse(
@@ -34,7 +36,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-//    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ResponseEntity<UserResponse> findById(@PathVariable Long id) {
         return ResponseEntity.ok(userMapper.userToResponse(
                 databaseUserService.findById(id)
@@ -50,17 +52,19 @@ public class UserController {
                 .body(userMapper.userToResponse(databaseUserService.save(newUser)));
     }
 
-    @PutMapping("/{id}")
-//    @PreAuthorize("hasRole('ROLE_USER')")
-    public ResponseEntity<UserResponse> update(@PathVariable Long id,
+    @PutMapping
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+    public ResponseEntity<UserResponse> update(@AuthenticationPrincipal UserDetails userDetails,
                                                @RequestBody UpsertUserRequest request) {
+
+        Long id = databaseUserService.findByUsername(userDetails.getUsername()).getId();
         User updatedUser = databaseUserService.update(userMapper.requestToUser(id, request));
 
         return ResponseEntity.ok(userMapper.userToResponse(updatedUser));
     }
 
     @DeleteMapping("/{id}")
-//    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         databaseUserService.deleteById(id);
 

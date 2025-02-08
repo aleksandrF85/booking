@@ -34,6 +34,7 @@ public abstract class RoomMapperDelegate implements RoomMapper{
 
         RoomResponse response = new RoomResponse();
         response.setId(room.getId());
+        response.setName(room.getName());
         response.setDescription(room.getDescription());
         response.setNumber(room.getNumber());
         response.setPrice(room.getPrice());

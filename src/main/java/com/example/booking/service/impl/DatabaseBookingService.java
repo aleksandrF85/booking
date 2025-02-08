@@ -14,6 +14,7 @@ import com.example.booking.utils.BeanUtils;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
@@ -22,14 +23,17 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class DatabaseBookingService implements BookingService {
 
-    private final BookingRepository bookingRepository;
+    @Autowired
+    private BookingRepository bookingRepository;
 
-    private final RoomService databaseRoomService;
+    @Autowired
+    private RoomService databaseRoomService;
 
-    private final UserService databaseUserService;
+    @Autowired
+    private UserService databaseUserService;
 
 
     @Override
@@ -38,11 +42,6 @@ public class DatabaseBookingService implements BookingService {
         return bookingRepository.findAll();
     }
 
-    @Override
-    public List<Booking> findByRoom(Room room) {
-
-        return bookingRepository.findByRoom(room);
-    }
 
     @Override
     public List<Booking> findByUser(User user) {

@@ -8,14 +8,14 @@ import org.hibernate.validator.constraints.Range;
 
 @Data
 public class UpsertRoomRequest {
-    @NotEmpty
+    @NotEmpty(message = "Имя должно быть указано")
     private String name;
-    @NotEmpty
+    @NotEmpty(message = "Описание должно быть указано")
     private String description;
-    @Positive
+    @Positive(message = " Номер должен быть указан, и быть больше ноля")
     private int number;
-    @Positive
+    @Positive(message = " Стоимость должна быть указана, и быть больше ноля")
     private int price;
-    @Range(min = 1, max = 6)
+    @Range(min = 1, max = 6, message = "Вместительность может быть быть от {min} до {max}")
     private int maxCapacity;
 }

@@ -3,27 +3,30 @@ package com.example.booking.service.impl;
 import com.example.booking.model.Hotel;
 import com.example.booking.model.Room;
 import com.example.booking.repository.RoomRepository;
+import com.example.booking.repository.RoomSpecification;
 import com.example.booking.service.HotelService;
 import com.example.booking.service.RoomService;
 import com.example.booking.utils.BeanUtils;
+import com.example.booking.web.model.filter.RoomFilter;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 @Service
 public class DatabaseRoomService implements RoomService {
 
-    private final RoomRepository roomRepository;
+    @Autowired
+    private RoomRepository roomRepository;
 
-    private final HotelService databaseHotelService;
+    @Autowired
+    private HotelService databaseHotelService;
 
     @Override
     public List<Room> findAll() {
@@ -39,18 +42,34 @@ public class DatabaseRoomService implements RoomService {
     }
 
     @Override
+    public List<Room> filterBy(RoomFilter filter, int pageSize, int pageNumber) {
+        return roomRepository.findAll(
+                RoomSpecification.withFilter(filter),
+                PageRequest.of(pageSize, pageNumber))
+                .getContent();
+    }
+
+    @Override
     public Room findByHotelAndNumber(Hotel hotel, int number) {
 
         return roomRepository.findByHotelAndNumber(hotel, number)
                 .orElseThrow(() -> new EntityNotFoundException(MessageFormat.format(
                 "Комната в отеле {0} с номером {1} не найдена!", hotel.getName(), number
-        )));         //TODO проверить метод
+        )));
     }
 
     @Transactional
     @Override
     public Room save(Room room, String hotelName) {
-        room.setHotel(databaseHotelService.findByName(hotelName));
+
+        var hotel = databaseHotelService.findByName(hotelName);
+
+        if (roomRepository.findByHotelAndNumber(hotel, room.getNumber()).isPresent()){
+            throw new IllegalArgumentException(MessageFormat.format(
+                    "Комната в отеле {0} с номером {1} уже существует!", hotelName, room.getNumber()
+            ));
+        }
+        room.setHotel(hotel);
 
         return roomRepository.save(room);
     }
@@ -85,7 +104,7 @@ public class DatabaseRoomService implements RoomService {
     public void checkDates(LocalDate checkIn, LocalDate checkOut) {
 
         if (checkOut.isBefore(checkIn)) {
-            throw new IllegalArgumentException("Дата выезда раньше, чем заезда");
+            throw new IllegalArgumentException("Указана дата выезда раньше, чем заезда");
         }
     }
 

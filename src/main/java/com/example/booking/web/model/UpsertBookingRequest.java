@@ -19,10 +19,10 @@ public class UpsertBookingRequest {
     @Positive(message = "Номен должен быть заполнен")
     private int roomNumber;
 
-    @FutureOrPresent
+    @FutureOrPresent(message = "Дата должна быть формата ГГГГ-ММ-ДД, сегодня или позднее")
     private LocalDate checkIn;
 
-    @Future
+    @Future(message = "Дата должна быть формата ГГГГ-ММ-ДД и позднее сегодняшнего дня")
     private LocalDate checkOut;
 
     @Positive(message = "Количество гостей должно быть указано")

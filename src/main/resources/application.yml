@@ -1,4 +1,6 @@
 spring:
+  main:
+    allow-circular-references: true
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQL94Dialect
     properties:
@@ -10,7 +12,7 @@ spring:
           jta:
             platform: enable
     hibernate:
-      ddl-auto: create #update
+      ddl-auto: update #create
     generate-ddl: true
     show-sql: true
   datasource:

@@ -2,24 +2,37 @@ package com.example.booking.service.impl;
 
 import com.example.booking.model.Hotel;
 import com.example.booking.repository.HotelRepository;
+import com.example.booking.repository.HotelSpecification;
 import com.example.booking.service.HotelService;
 import com.example.booking.utils.BeanUtils;
+import com.example.booking.web.model.filter.HotelFilter;
 import jakarta.persistence.EntityNotFoundException;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class DatabaseHotelService implements HotelService {
 
-    private final HotelRepository hotelRepository;
+    @Autowired
+    private HotelRepository hotelRepository;
 
     @Override
     public List<Hotel> findAll() {
         return hotelRepository.findAll();
+    }
+
+    @Override
+    public List<Hotel> filterBy(HotelFilter filter, int pageSize, int pageNumber){
+        return hotelRepository.findAll(
+                HotelSpecification.withFilter(filter),
+                PageRequest.of(pageNumber, pageSize))
+                .getContent();
     }
 
     @Override
@@ -58,5 +71,32 @@ public class DatabaseHotelService implements HotelService {
 
         findById(id);
         hotelRepository.deleteById(id);
+    }
+
+    @Override
+    public Hotel rate(Long id, Integer mark) {
+
+        Hotel hotel = findById(id);
+
+        double rating = hotel.getRating();
+
+        int numberOfRatings = hotel.getNumberOfRatings();
+
+        if (rating > 0 && numberOfRatings > 0) {
+
+            double totalRating = rating * numberOfRatings;
+            totalRating = totalRating - rating + mark;
+            rating = Math.round(totalRating / numberOfRatings * 10) / 10.0;
+            numberOfRatings = numberOfRatings + 1;
+
+        } else {
+            rating =  mark;
+            numberOfRatings = 1;
+        }
+
+        hotel.setRating(rating);
+        hotel.setNumberOfRatings(numberOfRatings);
+
+        return update(hotel);
     }
 }

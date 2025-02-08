@@ -17,7 +17,7 @@ import java.util.List;
 @Slf4j
 public class ExceptionHandlerController {
 
-    @ExceptionHandler(EntityNotFoundException.class)
+    @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> exceptionHandler (Exception ex){
 
         if (ex instanceof EntityNotFoundException) {
@@ -50,35 +50,4 @@ public class ExceptionHandlerController {
                 .body(new ErrorResponse(ex.getMessage()));
 
     }
-//
-//    @ExceptionHandler(EntityNotFoundException.class)
-//    public ResponseEntity<ErrorResponse> notFoundExceptionHandler (EntityNotFoundException ex){
-//        return ResponseEntity
-//                .status(HttpStatus.NOT_FOUND)
-//                .body(new ErrorResponse(ex.getMessage()));
-//    }
-//
-//    @ExceptionHandler(MethodArgumentNotValidException.class)
-//    public ResponseEntity<ErrorResponse> notValid (MethodArgumentNotValidException ex){
-//        BindingResult bindingResult = ex.getBindingResult();
-//        List<String> errorMessages = bindingResult.getAllErrors()
-//                .stream()
-//                .map(DefaultMessageSourceResolvable::getDefaultMessage)
-//                .toList();
-//
-//        String errorMessage = String.join("; ", errorMessages);
-//        return ResponseEntity
-//                .status(HttpStatus.BAD_REQUEST)
-//                .body(new ErrorResponse(errorMessage));
-//    }
-//
-//    @ExceptionHandler(IllegalArgumentException.class)
-//    public ResponseEntity<ErrorResponse> illegalArgumentExceptionHandler (IllegalArgumentException ex){
-//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(ex.getMessage()));
-//    }
-//
-//    @ExceptionHandler(Exception.class)
-//    public ResponseEntity<ErrorResponse> unprocessedExceptionHandler (Exception ex){
-//        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse(ex.getMessage()));
-//    }
 }

@@ -42,7 +42,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Set<RoleType> roles = new HashSet<>();
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")
     @ToString.Exclude
     private List<Booking> bookingList = new ArrayList<>();
 
