@@ -49,7 +49,13 @@ public abstract class BookingMapperDelegate implements BookingMapper{
     @Override
     public Booking requestToBooking(Long id, UpsertBookingRequest request) {
 
+        var hotel = databaseHotelService.findByName((request.getHotelName()));
+        var room = databaseRoomService.findByHotelAndNumber(hotel, request.getRoomNumber());
+        var bookingDates = request.getCheckIn().datesUntil(request.getCheckOut()).collect(Collectors.toList());
+        databaseRoomService.removeBookingDates(room, bookingDates);
+
         Booking booking = requestToBooking(request);
+
         booking.setId(id);
 
         return booking;

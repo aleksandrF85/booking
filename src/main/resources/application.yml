@@ -23,3 +23,18 @@ spring:
       schema: booking_schema
       connection-init-sql: CREATE SCHEMA IF NOT EXISTS booking_schema
       connection-timeout: 10000
+  kafka:
+    bootstrap-servers: localhost:9092
+  mongodb:
+    uri: mongodb://docker:mongopw@localhost:27017
+    host: localhost
+    port: 27017
+    username: docker
+    password: mongopw
+    authentication-database: admin
+    database: admin
+app:
+  kafka:
+    userRegistrations: "user-registrations"
+    roomBookings: "room-bookings"
+    groupId: "stats"

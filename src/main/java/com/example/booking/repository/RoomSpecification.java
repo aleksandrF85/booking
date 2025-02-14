@@ -1,6 +1,5 @@
 package com.example.booking.repository;
 
-import com.example.booking.model.Hotel;
 import com.example.booking.model.Room;
 import com.example.booking.web.model.filter.RoomFilter;
 import org.springframework.data.jpa.domain.Specification;
@@ -68,32 +67,18 @@ public interface RoomSpecification {
         // которые свободны в этом временном диапазоне.
 
         return ((root, query, criteriaBuilder) -> {
-            if (checkIn == null && checkOut == null) {
+            if (checkIn == null || checkOut == null) {
                 return null;
             }
-//            if (minPrice == null || minPrice <= 0) {
-//                return criteriaBuilder.lessThanOrEqualTo(root.get("price"), maxPrice);
-//            }
-//            if (maxPrice == null || maxPrice <= 0) {
-//                return criteriaBuilder.greaterThanOrEqualTo(root.get("price"), minPrice);
-//            }
-//
-//            criteriaBuilder.array(root.get("unavailableDates")).isCompoundSelection();
-//            var unavailableDates = root.get("unavailableDates");
-//
-//            var bookingDates = checkIn.datesUntil(checkOut);
-//
-////            for (LocalDate date: bookingDates){
-////                if (unavailableDates.contains(date)){
-////                    throw new IllegalArgumentException(MessageFormat.format(
-////                            "Дата {0} не доступна", date
-////                    ));
-////                }
-////                unavailableDates.add(date);
-//            }
-//
-//            return criteriaBuilder.between(root.get("price"), minPrice, maxPrice);
-            return null;
+
+            var bookingDates = checkIn.datesUntil(checkOut);
+
+            return criteriaBuilder.and(
+
+//                    criteriaBuilder.isNotMember(bookingDates, root.get("unavailableDates")),
+                    criteriaBuilder.isNotMember(checkIn, root.get("unavailableDates")),
+                    criteriaBuilder.isNotMember(checkOut, root.get("unavailableDates"))
+            );
         });
     }
 

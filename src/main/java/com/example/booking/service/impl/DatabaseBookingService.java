@@ -1,30 +1,34 @@
 package com.example.booking.service.impl;
 
 import com.example.booking.model.Booking;
-import com.example.booking.model.Hotel;
-import com.example.booking.model.Room;
 import com.example.booking.model.User;
+import com.example.booking.model.event.RoomBookingEvent;
 import com.example.booking.repository.BookingRepository;
-import com.example.booking.repository.RoomRepository;
-import com.example.booking.repository.UserRepository;
 import com.example.booking.service.BookingService;
 import com.example.booking.service.RoomService;
 import com.example.booking.service.UserService;
 import com.example.booking.utils.BeanUtils;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 //@RequiredArgsConstructor
 public class DatabaseBookingService implements BookingService {
+
+    @Value("${app.kafka.roomBookings}")
+    private String roomBookingTopic;
+
+    @Autowired
+    private KafkaTemplate<String, RoomBookingEvent> kafkaTemplate;
 
     @Autowired
     private BookingRepository bookingRepository;
@@ -61,11 +65,19 @@ public class DatabaseBookingService implements BookingService {
     @Override
     public Booking save(Booking booking, String username) {
 
-        booking.setUser(databaseUserService.findByUsername(username));
+        var user = databaseUserService.findByUsername(username);
+        booking.setUser(user);
+
+
+        RoomBookingEvent event = new RoomBookingEvent(user.getId(), booking.getRoom().getId(),
+                booking.getCheckIn(), booking.getCheckOut(), LocalDateTime.now());
+
+        kafkaTemplate.send(roomBookingTopic, event);
 
         return bookingRepository.save(booking);
     }
 
+    @Transactional
     @Override
     public Booking update(Booking booking) {
 

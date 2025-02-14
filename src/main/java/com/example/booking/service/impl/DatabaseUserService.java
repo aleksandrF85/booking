@@ -1,5 +1,6 @@
 package com.example.booking.service.impl;
 
+import com.example.booking.model.event.UserRegistrationEvent;
 import com.example.booking.model.Booking;
 import com.example.booking.model.User;
 import com.example.booking.repository.UserRepository;
@@ -10,15 +11,24 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 //@RequiredArgsConstructor
 public class DatabaseUserService implements UserService {
+
+    @Value("${app.kafka.userRegistrations}")
+    private String userRegistrationsTopic;
+
+    @Autowired
+    private KafkaTemplate<String, UserRegistrationEvent> kafkaTemplate;
 
     @Autowired
     private UserRepository userRepository;
@@ -56,6 +66,10 @@ public class DatabaseUserService implements UserService {
         isUserAlreadyExist(user);
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        UserRegistrationEvent event = new UserRegistrationEvent(user.getId(), LocalDateTime.now());
+        kafkaTemplate.send(userRegistrationsTopic, event);
+
         return userRepository.save(user);
     }
 
