@@ -40,3 +40,14 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: mongopw
       MONGO_INITDB_DATABASE: admin
 
+
+#docker compose up
+
+#mongo
+#docker images
+#docker run -d --name mongodb -p 27017:27017 mongo (image name)
+#docker exec -it CONTAINER ID mongosh
+#use admin
+#db.createUser({user:"docker", pwd:"mongopw", roles:[{role:"dbOwner", db:"admin"}]})
+#db.createCollection("statistics")
+#quit

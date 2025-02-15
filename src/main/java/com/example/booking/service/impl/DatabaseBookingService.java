@@ -67,7 +67,9 @@ public class DatabaseBookingService implements BookingService {
 
         var user = databaseUserService.findByUsername(username);
         booking.setUser(user);
-
+        
+        var bookingDates = booking.getCheckIn().datesUntil(booking.getCheckOut()).collect(Collectors.toList());
+        databaseRoomService.setUnavailableDates(booking.getRoom(), bookingDates);
 
         RoomBookingEvent event = new RoomBookingEvent(user.getId(), booking.getRoom().getId(),
                 booking.getCheckIn(), booking.getCheckOut(), LocalDateTime.now());
@@ -83,7 +85,13 @@ public class DatabaseBookingService implements BookingService {
 
         Booking bookingForUpdate = findById(booking.getId());
 
+        var bookingDates = bookingForUpdate.getCheckIn().datesUntil(bookingForUpdate.getCheckOut()).collect(Collectors.toList());
+        databaseRoomService.removeBookingDates(bookingForUpdate.getRoom(), bookingDates);
+
         BeanUtils.copyNonNullProperties(booking, bookingForUpdate);
+
+        var bookingUpdatedDates = bookingForUpdate.getCheckIn().datesUntil(bookingForUpdate.getCheckOut()).collect(Collectors.toList());
+        databaseRoomService.setUnavailableDates(booking.getRoom(), bookingUpdatedDates);
 
         return bookingRepository.save(bookingForUpdate);
     }

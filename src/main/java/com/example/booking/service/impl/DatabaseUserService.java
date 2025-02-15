@@ -9,7 +9,6 @@ import com.example.booking.service.UserService;
 import com.example.booking.utils.BeanUtils;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -21,7 +20,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-//@RequiredArgsConstructor
 public class DatabaseUserService implements UserService {
 
     @Value("${app.kafka.userRegistrations}")
@@ -67,10 +65,10 @@ public class DatabaseUserService implements UserService {
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        UserRegistrationEvent event = new UserRegistrationEvent(user.getId(), LocalDateTime.now());
+        UserRegistrationEvent event = new UserRegistrationEvent(userRepository.save(user).getId(), LocalDateTime.now());
         kafkaTemplate.send(userRegistrationsTopic, event);
 
-        return userRepository.save(user);
+        return user;
     }
 
     @Override

@@ -1,7 +1,11 @@
 package com.example.booking.repository;
 
+import com.example.booking.model.Booking;
 import com.example.booking.model.Room;
 import com.example.booking.web.model.filter.RoomFilter;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.Subquery;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.time.LocalDate;
@@ -59,26 +63,39 @@ public interface RoomSpecification {
             return criteriaBuilder.between(root.get("price"), minPrice, maxPrice);
         });
     }
-    static Specification<Room> byAvailableDates(LocalDate checkIn, LocalDate checkOut) {
 
-        //TODO - Фильтрация по датам заезда и выезда должна учитывать оба поля.
-        // Если заполнено только одно из полей, фильтрация не срабатывает.
-        // При выборе дат заезда и выезда нужно показывать только те номера,
-        // которые свободны в этом временном диапазоне.
+    /**Фильтрация по датам заезда и выезда должна учитывать оба поля.
+    Если заполнено только одно из полей, фильтрация не срабатывает.
+    При выборе дат заезда и выезда нужно показывать только те номера,
+    которые свободны в этом временном диапазоне.**/
+    static Specification<Room> byAvailableDates(LocalDate checkIn, LocalDate checkOut) {
 
         return ((root, query, criteriaBuilder) -> {
             if (checkIn == null || checkOut == null) {
                 return null;
             }
 
-            var bookingDates = checkIn.datesUntil(checkOut);
+            Subquery<Long> subquery = query.subquery(Long.class);
+            Root<Room> subRoot = subquery.from(Room.class);
+            Join<Room, Booking> bookings = subRoot.join("bookings");
 
-            return criteriaBuilder.and(
+            subquery.select(subRoot.get("id"))
+                    .where(criteriaBuilder.or(
+                            criteriaBuilder.and(
+                                    criteriaBuilder.lessThanOrEqualTo(bookings.get("checkIn"), checkIn),
+                                    criteriaBuilder.greaterThanOrEqualTo(bookings.get("checkOut"), checkIn)
+                            ),
+                            criteriaBuilder.and(
+                                    criteriaBuilder.lessThanOrEqualTo(bookings.get("checkIn"), checkOut),
+                                    criteriaBuilder.greaterThanOrEqualTo(bookings.get("checkOut"), checkOut)
+                            ),
+                            criteriaBuilder.and(
+                                    criteriaBuilder.greaterThanOrEqualTo(bookings.get("checkIn"), checkIn),
+                                    criteriaBuilder.lessThanOrEqualTo(bookings.get("checkOut"), checkOut)
+                            )
+                    ));
 
-//                    criteriaBuilder.isNotMember(bookingDates, root.get("unavailableDates")),
-                    criteriaBuilder.isNotMember(checkIn, root.get("unavailableDates")),
-                    criteriaBuilder.isNotMember(checkOut, root.get("unavailableDates"))
-            );
+            return criteriaBuilder.not(root.get("id").in(subquery));
         });
     }
 
