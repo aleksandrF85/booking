@@ -7,7 +7,7 @@ import com.example.booking.repository.RoomSpecification;
 import com.example.booking.service.HotelService;
 import com.example.booking.service.RoomService;
 import com.example.booking.utils.BeanUtils;
-import com.example.booking.web.model.filter.RoomFilter;
+import com.example.booking.web.dto.filter.RoomFilter;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -2,7 +2,7 @@ package com.example.booking.repository;
 
 import com.example.booking.model.Booking;
 import com.example.booking.model.Room;
-import com.example.booking.web.model.filter.RoomFilter;
+import com.example.booking.web.dto.filter.RoomFilter;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Root;
 import jakarta.persistence.criteria.Subquery;

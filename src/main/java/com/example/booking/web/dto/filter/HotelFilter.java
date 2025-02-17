@@ -1,9 +1,11 @@
-package com.example.booking.web.model;
+package com.example.booking.web.dto.filter;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-public class HotelResponse {
+@NoArgsConstructor
+public class HotelFilter {
 
     private Long id;
 

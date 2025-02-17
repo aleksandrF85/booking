@@ -1,6 +1,6 @@
 package com.example.booking.validation;
 
-import com.example.booking.web.model.filter.PageFilter;
+import com.example.booking.web.dto.filter.PageFilter;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.apache.commons.lang3.ObjectUtils;

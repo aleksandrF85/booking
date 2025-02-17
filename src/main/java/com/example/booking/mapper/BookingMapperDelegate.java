@@ -3,8 +3,8 @@ package com.example.booking.mapper;
 import com.example.booking.model.Booking;
 import com.example.booking.service.HotelService;
 import com.example.booking.service.RoomService;
-import com.example.booking.web.model.BookingResponse;
-import com.example.booking.web.model.UpsertBookingRequest;
+import com.example.booking.web.dto.BookingResponse;
+import com.example.booking.web.dto.UpsertBookingRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class BookingMapperDelegate implements BookingMapper{

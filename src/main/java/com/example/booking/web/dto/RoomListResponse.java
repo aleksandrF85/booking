@@ -1,6 +1,5 @@
-package com.example.booking.web.model;
+package com.example.booking.web.dto;
 
-import com.example.booking.web.model.RoomResponse;
 import lombok.Data;
 
 import java.util.ArrayList;

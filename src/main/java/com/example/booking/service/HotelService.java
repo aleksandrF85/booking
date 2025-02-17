@@ -2,7 +2,7 @@ package com.example.booking.service;
 
 
 import com.example.booking.model.Hotel;
-import com.example.booking.web.model.filter.HotelFilter;
+import com.example.booking.web.dto.filter.HotelFilter;
 
 import java.util.List;
 

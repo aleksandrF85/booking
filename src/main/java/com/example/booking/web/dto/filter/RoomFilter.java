@@ -1,15 +1,9 @@
-package com.example.booking.web.model.filter;
+package com.example.booking.web.dto.filter;
 
-import com.example.booking.model.Hotel;
-import jakarta.persistence.Column;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 @NoArgsConstructor

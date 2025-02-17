@@ -2,6 +2,7 @@ package com.example.booking.service;
 
 import com.example.booking.model.event.RoomBookingEvent;
 import com.example.booking.model.event.UserRegistrationEvent;
+import org.springframework.core.io.Resource;
 
 import java.io.IOException;
 
@@ -11,5 +12,7 @@ public interface StatisticsService {
 
     void collectRoomBookingStatistics(RoomBookingEvent event);
 
-    String exportStatisticsToCSV() throws IOException;
+    String recordStatisticsToCSV() throws IOException;
+
+    public Resource downloadStatistics();
 }

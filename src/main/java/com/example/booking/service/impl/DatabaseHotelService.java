@@ -5,11 +5,10 @@ import com.example.booking.repository.HotelRepository;
 import com.example.booking.repository.HotelSpecification;
 import com.example.booking.service.HotelService;
 import com.example.booking.utils.BeanUtils;
-import com.example.booking.web.model.filter.HotelFilter;
+import com.example.booking.web.dto.filter.HotelFilter;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;

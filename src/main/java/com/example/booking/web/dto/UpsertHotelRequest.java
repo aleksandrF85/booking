@@ -1,4 +1,4 @@
-package com.example.booking.web.model;
+package com.example.booking.web.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;

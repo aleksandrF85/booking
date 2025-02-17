@@ -1,7 +1,7 @@
 package com.example.booking.mapper;
 
 import com.example.booking.model.Booking;
-import com.example.booking.web.model.*;
+import com.example.booking.web.dto.*;
 import org.mapstruct.DecoratedWith;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;

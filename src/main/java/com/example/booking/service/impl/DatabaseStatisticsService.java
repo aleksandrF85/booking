@@ -9,9 +9,12 @@ import com.example.booking.repository.StatisticRepository;
 import com.example.booking.service.StatisticsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.List;
 
@@ -59,7 +62,7 @@ public class DatabaseStatisticsService implements StatisticsService {
     }
 
     @Override
-    public String exportStatisticsToCSV() throws IOException {
+    public String recordStatisticsToCSV() throws IOException {
 
         List<Statistic> statistics = statisticRepository.findAll();
         StringBuilder csvBuilder = new StringBuilder();
@@ -87,4 +90,22 @@ public class DatabaseStatisticsService implements StatisticsService {
         return csvBuilder.toString();
     }
 
+    @Override
+    public Resource downloadStatistics() {
+
+        try {
+            // Получаем данные в формате CSV
+            String csvData = recordStatisticsToCSV();
+
+            // Преобразуем строку в InputStreamResource
+            ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(csvData.getBytes());
+            InputStreamResource resource = new InputStreamResource(byteArrayInputStream);
+
+            return resource;
+
+        } catch (IOException e) {
+
+            return new InputStreamResource(new ByteArrayInputStream("Ошибка записи файла CSV".getBytes()));
+        }
+    }
 }

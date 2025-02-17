@@ -1,9 +1,9 @@
 package com.example.booking.mapper;
 
 import com.example.booking.model.Room;
-import com.example.booking.web.model.RoomListResponse;
-import com.example.booking.web.model.RoomResponse;
-import com.example.booking.web.model.UpsertRoomRequest;
+import com.example.booking.web.dto.RoomListResponse;
+import com.example.booking.web.dto.RoomResponse;
+import com.example.booking.web.dto.UpsertRoomRequest;
 import org.mapstruct.*;
 
 import java.util.List;

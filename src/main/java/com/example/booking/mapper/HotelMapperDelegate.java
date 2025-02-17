@@ -1,8 +1,8 @@
 package com.example.booking.mapper;
 
 import com.example.booking.model.Hotel;
-import com.example.booking.web.model.HotelResponse;
-import com.example.booking.web.model.UpsertHotelRequest;
+import com.example.booking.web.dto.HotelResponse;
+import com.example.booking.web.dto.UpsertHotelRequest;
 
 public abstract class HotelMapperDelegate implements HotelMapper{
 

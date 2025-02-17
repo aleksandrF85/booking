@@ -1,7 +1,6 @@
-package com.example.booking.web.model;
+package com.example.booking.web.dto;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
 public class RoomResponse{

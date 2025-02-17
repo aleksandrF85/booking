@@ -3,7 +3,7 @@ package com.example.booking.web.controller;
 import com.example.booking.mapper.BookingMapper;
 import com.example.booking.model.Booking;
 import com.example.booking.service.BookingService;
-import com.example.booking.web.model.*;
+import com.example.booking.web.dto.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

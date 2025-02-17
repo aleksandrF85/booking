@@ -1,9 +1,8 @@
-package com.example.booking.web.model;
+package com.example.booking.web.dto;
 
 import lombok.Data;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Data
 public class BookingResponse {

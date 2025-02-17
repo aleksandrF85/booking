@@ -1,14 +1,9 @@
-package com.example.booking.web.model;
+package com.example.booking.web.dto;
 
-import com.example.booking.model.Room;
-import com.example.booking.model.User;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Data
 public class UpsertBookingRequest {

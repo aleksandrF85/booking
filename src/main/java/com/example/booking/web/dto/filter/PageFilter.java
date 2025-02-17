@@ -1,4 +1,4 @@
-package com.example.booking.web.model.filter;
+package com.example.booking.web.dto.filter;
 
 import com.example.booking.validation.PageFilterValidation;
 import lombok.Data;

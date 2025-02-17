@@ -1,6 +1,6 @@
 package com.example.booking.web.controller;
 
-import com.example.booking.web.model.ErrorResponse;
+import com.example.booking.web.dto.ErrorResponse;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;

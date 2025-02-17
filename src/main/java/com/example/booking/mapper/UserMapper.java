@@ -1,9 +1,9 @@
 package com.example.booking.mapper;
 
 import com.example.booking.model.User;
-import com.example.booking.web.model.UpsertUserRequest;
-import com.example.booking.web.model.UserListResponse;
-import com.example.booking.web.model.UserResponse;
+import com.example.booking.web.dto.UpsertUserRequest;
+import com.example.booking.web.dto.UserListResponse;
+import com.example.booking.web.dto.UserResponse;
 import org.mapstruct.*;
 
 import java.util.List;

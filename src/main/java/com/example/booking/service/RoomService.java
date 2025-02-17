@@ -2,8 +2,7 @@ package com.example.booking.service;
 
 import com.example.booking.model.Hotel;
 import com.example.booking.model.Room;
-import com.example.booking.web.model.filter.HotelFilter;
-import com.example.booking.web.model.filter.RoomFilter;
+import com.example.booking.web.dto.filter.RoomFilter;
 
 import java.time.LocalDate;
 import java.util.List;
